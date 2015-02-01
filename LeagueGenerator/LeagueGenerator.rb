@@ -53,9 +53,11 @@ K_File.close
 D_File.close
 
 # Keep track of the user id (will be incremental)
-userId = 0
+userId = 1
+# Intial date and time of league creation
+t = Time.new(2014, 8, 2, 10, 0, 0)
 
-for num_league in 0..NUM_LEAGUES
+for num_league in 1..NUM_LEAGUES
 
 	## Programming for a League Starts Here:
 	for i in 0..10
@@ -72,42 +74,42 @@ for num_league in 0..NUM_LEAGUES
 		else
 			# For any given user choose the players
 			# Select random pick, remove from available list
-			print "#{num_league},"
-			print "#{userId},"
+			identifiers = "#{num_league}, #{userId}, "
 
 			randomPick = rand(qbSel.length)
 			user_QB = qbSel[randomPick]
-			print "#{user_QB},"
+			print identifiers + "#{user_QB}, QB, #{t}\n"
 			qbSel.delete qbSel[randomPick]
 
 			2.times do
 				randomPick = rand(rbSel.length)
 				user_RB = rbSel[randomPick]
-				print "#{user_RB},"
+				print identifiers + "#{user_RB}, RB, #{t}\n"
 				rbSel.delete rbSel[randomPick]
 			end
 
 			2.times do
 				randomPick = rand(wrSel.length)
 				user_WR = wrSel[randomPick]
-				print "#{user_WR},"
+				print identifiers + "#{user_WR}, WR, #{t}\n"
 				wrSel.delete wrSel[randomPick]
 			end
 
 			randomPick = rand(teSel.length)
 			user_TE = teSel[randomPick]
-			print "#{user_TE},"
+			print identifiers + "#{user_TE}, TE, #{t}\n"
 			teSel.delete teSel[randomPick]
 
-			randomPick = rand(kSel.length)
-			user_K = kSel[randomPick]
-			print "#{user_K},"
-			kSel.delete kSel[randomPick]
+			## Narrowing down the team
+			#randomPick = rand(kSel.length)
+			#user_K = kSel[randomPick]
+			#print "#{user_K},"
+			#kSel.delete kSel[randomPick]
 
-			randomPick = rand(dSel.length)
-			user_D = dSel[randomPick]
-			print "#{user_D}\n"
-			dSel.delete dSel[randomPick] 
+			#randomPick = rand(dSel.length)
+			#user_D = dSel[randomPick]
+			#print "#{user_D}\n"
+			#dSel.delete dSel[randomPick] 
 
 			userId += 1
 		end

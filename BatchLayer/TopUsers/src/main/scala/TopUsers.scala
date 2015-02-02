@@ -26,7 +26,7 @@ object TopUsers {
 		val playerPoints = sc.textFile("hdfs://hdfs://ip-172-31-13-111.us-west-1.compute.internal:8020/user/solivero/fantasyfootball/playerpoints/PlayerData.csv")
 
 		/** Calculate Top 10 Users for all time **/
-		val topUsers = file.map({line => val pieces = line.split(",") 
+		val topUsers = userPoints.map({line => val pieces = line.split(",") 
 			(pieces(0), pieces(1).toDouble)}).reduceByKey(_+_)
 
 		// Swap the keys and values for sorting!
@@ -43,18 +43,23 @@ object TopUsers {
 			(pieces(0) + "|" + datePieces(0), pieces(1).toDouble)}).reduceByKey(_+_)
 		*/
 
-		val scoresmonth = file.map({line => val pieces = line.split(",")
+		val scoresmonth = userPoints.map({line => val pieces = line.split(",")
 			val datePieces = pieces(3).split("/")
 			((pieces(0),datePieces(0)),pieces(1).toDouble)}).reduceByKey(_+_)
 
-		scoresmonth.saveToCassandra("fantasyfootball",)
+		//scoresmonth.saveToCassandra("fantasyfootball","userpoints",SomeColumns("userid","date","points"))
 
 		// Save as: userid, month, points
 
 
-		val scoresday = file.map({line => val pieces = line.split(",")
+		val scoresday = userPoints.map({line => val pieces = line.split(",")
 			val datePieces = pieces(3).split("/")
 			((pieces(0),datePieces(1)),pieces(1).toDouble)}).reduceByKey(_+_)
+
+		// Flatten the key to store in different columns
+		// TODO: Check how I'm storing my userid... no real need for a double... date is also a string atm
+		val scoresdayf = scoresday.map{case(composite,points) => (composite._1.toDouble,composite._2,points)}
+		scoresdayf.saveToCassandra("fantasyfootball","userpoints",SomeColumns("userid","date","points"))
 
 		// Save as: userid, day, points
 

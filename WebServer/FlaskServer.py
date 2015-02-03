@@ -9,15 +9,11 @@ session = cluster.connect('fantasyfootball')
 app = Flask(__name__)
 
 def query_db():
-    """Queries the database and returns a list of dictionaries."""
     rows = session.execute("SELECT * FROM fantasyfootball.topusers")
-    #for user_row in rows:
-    #	print user_row.userid, user_row.points
     rows = sorted(rows, key=lambda user_row: user_row.points, reverse=True)
     return rows
 
 def query_roster(userId):
-    """Queries the database and returns a list of dictionaries."""
     rows = session.execute("SELECT position,playername FROM fantasyfootball.userroster WHERE userid = " + userId)
     returnArr = []
     for rosterRow in rows:
@@ -27,7 +23,9 @@ def query_roster(userId):
     	returnArr.append(temp)
     return returnArr
 
-@app.route("/")
+@app.route("/management.html")
+def management():
+	return render_template('management.html',title="Customer Analysis")
 
 @app.route('/index')
 def index():
@@ -36,7 +34,7 @@ def index():
 
 @app.route("/topusers")
 def topusers():
-	return render_template('index.html',messages=query_db())
+	return render_template('management.html',messages=query_db())
 	
 @app.route("/topusers/json")
 def topusersJson():
@@ -47,11 +45,6 @@ def topusersJson():
 def userRoster(userId):
 	userRosterVar = json.dumps(query_roster(userId))
 	return userRosterVar
-
-#def countPlayer(player):
-#	rows = session.execute("SELECT * FROM fantasy.players WHERE name = '" + player + "'")
-	#strng = rows[0].count + " fantasy teams have choosen " + player
-#	return str(rows)
 
 
 if __name__ == "__main__":

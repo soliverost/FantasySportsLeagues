@@ -52,7 +52,18 @@
               <!-- sidebar menu start-->
               <ul class="sidebar-menu" id="nav-accordion">
               
-              	  <p class="centered"><a href="profile.html"><img src="" class="img-circle" width="60"></a></p>
+              	  <div>
+                      <h4 class="mb"><i class="fa fa-angle-right"></i> User</h4>
+                      
+                      <!-- <form class="form-inline" role="form"> -->
+                          <div class="form-group">
+                              <label class="sr-only" for="exampleInputEmail2">Select User:</label>
+                              <input type="number" class="form-control" placeholder="user id" id="userRoserUserId">
+                          </div>
+                          <button id="userRosterShowBtn" class="btn btn-theme">Show</button>
+                      <!-- </form> -->
+                  </div><!-- /form-panel -->
+
               	  <h5 class="centered">User 23481</h5>
               	  	
                   <li class="mt">
@@ -63,7 +74,7 @@
                   </li>
 
                   <li class="sub-menu">
-                      <a href="javascript:;" >
+                      <a href="management.html" >
                           <i class="fa fa-desktop"></i>
                           <span>Customer Analysis</span>
                       </a>
@@ -89,40 +100,16 @@
       <section id="main-content">
           <section class="wrapper">
 
-          	<script>
-            // Jquery not loaded until later...
-          	//$(document).ready(function() {
-            //    console.log( "ready!" );
-            //});
-
-            function getUserRoster(userId) {
-              $.ajax({
-              url: "data/user/roster/" + userId,
-              })
-              .done(function( json ) {
-                console.log(json);
-              });
-            };
-          	</script>
-
-            <ul class="messages">
-					  {% for message in messages %}
-					    <li> 
-					      {{ message.points }}
-					    </li>
-					  {% endfor %}
-					  </ul>
-                  
                       
-                      <div class="row mt">
-                                  <div class="col-md-4 col-sm-4 mb">
+          <div class="row mt">
+            <div class="col-md-4 col-sm-4 mb">
               <!-- REVENUE PANEL -->
               <div class="darkblue-panel pn">
                 <div class="darkblue-header">
-                  <h5>QB</h5>
+                  <h5 id="rosterQB">QB</h5>
                 </div>
                 <div class="chart mt">
-                  <div class="sparkline" data-type="line" data-resize="true" data-height="75" data-width="90%" data-line-width="1" data-line-color="#fff" data-spot-color="#fff" data-fill-color="" data-highlight-line-color="#fff" data-spot-radius="4" data-data="[200,135,667,333,526,996,564,123,890,464,655]"></div>
+                  <div class="sparkline" data-type="line" data-resize="true" data-height="75" data-width="90%" data-line-width="1" data-line-color="#fff" data-spot-color="#fff" data-fill-color="" data-highlight-line-color="#fff" data-spot-radius="4" data-data="[200,135,667,333,526,996,564,123,342,464,655]"></div>
                 </div>
               </div>
             </div><!-- /col-md-4 -->
@@ -131,10 +118,10 @@
               <!-- REVENUE PANEL -->
               <div class="darkblue-panel pn">
                 <div class="darkblue-header">
-                  <h5>RB</h5>
+                  <h5 id="rosterRB">RB</h5>
                 </div>
                 <div class="chart mt">
-                  <div class="sparkline" data-type="line" data-resize="true" data-height="75" data-width="90%" data-line-width="1" data-line-color="#fff" data-spot-color="#fff" data-fill-color="" data-highlight-line-color="#fff" data-spot-radius="4" data-data="[200,135,667,333,526,996,564,123,890,464,655]"></div>
+                  <div class="sparkline" data-type="line" data-resize="true" data-height="75" data-width="90%" data-line-width="1" data-line-color="#fff" data-spot-color="#fff" data-fill-color="" data-highlight-line-color="#fff" data-spot-radius="4" data-data="[200,135,453,333,526,996,234,123,890,464,655]"></div>
                 </div>
               </div>
             </div><!-- /col-md-4 -->
@@ -143,10 +130,10 @@
               <!-- REVENUE PANEL -->
               <div class="darkblue-panel pn">
                 <div class="darkblue-header">
-                  <h5>TE</h5>
+                  <h5 id="rosterTE">TE</h5>
                 </div>
                 <div class="chart mt">
-                  <div class="sparkline" data-type="line" data-resize="true" data-height="75" data-width="90%" data-line-width="1" data-line-color="#fff" data-spot-color="#fff" data-fill-color="" data-highlight-line-color="#fff" data-spot-radius="4" data-data="[200,135,667,333,526,996,564,123,890,464,655]"></div>
+                  <div class="sparkline" data-type="line" data-resize="true" data-height="75" data-width="90%" data-line-width="1" data-line-color="#fff" data-spot-color="#fff" data-fill-color="" data-highlight-line-color="#fff" data-spot-radius="4" data-data="[200,135,234,333,526,734,564,123,231,464,655]"></div>
                 </div>
               </div>
             </div><!-- /col-md-4 -->
@@ -156,56 +143,22 @@
                     </div><!-- /row -->
                     
 					<div class="row mt">
-                      <!--CUSTOM CHART START -->
-                      <div class="border-head">
-                          <h3>Title</h3>
-                      </div>
-                      <div class="custom-bar-chart">
-                          <ul class="y-axis">
-                              <li><span>10.000</span></li>
-                              <li><span>8.000</span></li>
-                              <li><span>6.000</span></li>
-                              <li><span>4.000</span></li>
-                              <li><span>2.000</span></li>
-                              <li><span>0</span></li>
-                          </ul>
-                          <div class="bar">
-                              <div class="title">JAN</div>
-                              <div class="value tooltips" data-original-title="8.500" data-toggle="tooltip" data-placement="top">85%</div>
-                          </div>
-                          <div class="bar ">
-                              <div class="title">FEB</div>
-                              <div class="value tooltips" data-original-title="5.000" data-toggle="tooltip" data-placement="top">50%</div>
-                          </div>
-                          <div class="bar ">
-                              <div class="title">MAR</div>
-                              <div class="value tooltips" data-original-title="6.000" data-toggle="tooltip" data-placement="top">60%</div>
-                          </div>
-                          <div class="bar ">
-                              <div class="title">APR</div>
-                              <div class="value tooltips" data-original-title="4.500" data-toggle="tooltip" data-placement="top">45%</div>
-                          </div>
-                          <div class="bar">
-                              <div class="title">MAY</div>
-                              <div class="value tooltips" data-original-title="3.200" data-toggle="tooltip" data-placement="top">32%</div>
-                          </div>
-                          <div class="bar ">
-                              <div class="title">JUN</div>
-                              <div class="value tooltips" data-original-title="6.200" data-toggle="tooltip" data-placement="top">62%</div>
-                          </div>
-                          <div class="bar">
-                              <div class="title">JUL</div>
-                              <div class="value tooltips" data-original-title="7.500" data-toggle="tooltip" data-placement="top">75%</div>
+                      <div class="col-lg-12">
+                          <div class="content-panel">
+                <h4><i class="fa fa-angle-right"></i> Points</h4>
+                              <div class="panel-body text-center">
+                                  <canvas id="line" height="300" width="400"></canvas>
+                              </div>
                           </div>
                       </div>
-                      <!--custom chart end-->
+                  </div>
 					</div><!-- /row -->	
 					
                   </div><!-- /col-lg-9 END SECTION MIDDLE -->
                                  
                   
                   
-              </div><! --/row -->
+              </div><!-- /row -->
           </section>
       </section>
 
@@ -240,6 +193,52 @@
 
     <!--script for this page-->
     <script src="static/js/sparkline-chart.js"></script>    
+    <script src="assets/js/chart-master/Chart.js"></script>
+    <script src="assets/js/chartjs-conf.js"></script>
+
+
+    <!-- more scripts -->
+
+    <!-- format me (indents and stuff) -->
+                <script>
+
+
+            function getUserRosterAndUpdateUi(userId) {
+              $.ajax({
+              url: "data/user/roster/" + userId,
+              })
+              .done(function( jsonString ) {
+                
+                // Debug print
+                // console.log(jsonString);
+
+                // Parse the string into a json object
+                var json = JSON.parse(jsonString);
+                for (var i = 0; i < json.length; i++) {
+                    
+                    // Debug print to web console
+                    // console.log(json[i].position + " " + json[i].playername);
+
+                    // Used index of because the json is returned as " QB" (extra leading space for some reason)
+                    if(json[i].position.indexOf("QB") >= 0)
+                      $("#rosterQB").text(json[i].playername);
+                    else if(json[i].position.indexOf("RB") >= 0)
+                      $("#rosterRB").text(json[i].playername);
+                    else if(json[i].position.indexOf("TE") >= 0)
+                      $("#rosterTE").text(json[i].playername);
+                }
+              });
+            };
+            </script>
+
+    <script>
+            $(document).ready(function() {
+                $("#userRosterShowBtn").click(function(){
+                  var userId = $("#userRoserUserId").val();
+                  getUserRosterAndUpdateUi(userId);
+                });
+            });
+    </script>
 
   
   </body>

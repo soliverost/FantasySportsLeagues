@@ -90,11 +90,19 @@
           <section class="wrapper">
 
           	<script>
-          	var topUsers = [];
-          	{% for message in messages %}
-          		topUsers.push([{{message.points}}, {{message.userid}}]);
-          	{% endfor %}
-          	topUsers.sort();
+            // Jquery not loaded until later...
+          	//$(document).ready(function() {
+            //    console.log( "ready!" );
+            //});
+
+            function getUserRoster(userId) {
+              $.ajax({
+              url: "data/user/roster/" + userId,
+              })
+              .done(function( json ) {
+                console.log(json);
+              });
+            };
           	</script>
 
             <ul class="messages">

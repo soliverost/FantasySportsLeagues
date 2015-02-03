@@ -16,6 +16,17 @@ def query_db():
     rows = sorted(rows, key=lambda user_row: user_row.points, reverse=True)
     return rows
 
+def query_roster(userId):
+    """Queries the database and returns a list of dictionaries."""
+    rows = session.execute("SELECT position,playername FROM fantasyfootball.userroster WHERE userid = " + userId)
+    returnArr = []
+    for rosterRow in rows:
+    	temp = {}
+    	temp["position"] = rosterRow[0]
+    	temp["playername"] = rosterRow[1]
+    	returnArr.append(temp)
+    return returnArr
+
 @app.route("/")
 
 @app.route('/index')
@@ -32,6 +43,10 @@ def topusersJson():
 	topUsersVar = json.dumps(query_db());
 	return topUsersVar
 
+@app.route("/data/user/roster/<userId>/")
+def userRoster(userId):
+	userRosterVar = json.dumps(query_roster(userId))
+	return userRosterVar
 
 #def countPlayer(player):
 #	rows = session.execute("SELECT * FROM fantasy.players WHERE name = '" + player + "'")

@@ -30,6 +30,21 @@
     <![endif]-->
   </head>
 
+  <style>
+
+    .axis path,
+    .axis line {
+      fill: none;
+      stroke: #000;
+      shape-rendering: crispEdges;
+    }
+
+    .area {
+      fill: steelblue;
+    }
+
+    </style>
+
   <body>
 
   <section id="container" >
@@ -52,19 +67,14 @@
               <!-- sidebar menu start-->
               <ul class="sidebar-menu" id="nav-accordion">
               
-              	  <div>
-                      <h4 class="mb"><i class="fa fa-angle-right"></i> User</h4>
-                      
-                      <!-- <form class="form-inline" role="form"> -->
+              	  <li class="mt">
+                      <h5 class="centered"> User</h5>
                           <div class="form-group">
-                              <label class="sr-only" for="exampleInputEmail2">Select User:</label>
+                              <label>Select User:</label>
                               <input type="number" class="form-control" placeholder="user id" id="userRoserUserId">
                           </div>
                           <button id="userRosterShowBtn" class="btn btn-theme">Show</button>
-                      <!-- </form> -->
-                  </div><!-- /form-panel -->
-
-              	  <h5 class="centered">User 23481</h5>
+                  </li>
               	  	
                   <li class="mt">
                       <a class="active" href="index.html">
@@ -74,7 +84,7 @@
                   </li>
 
                   <li class="sub-menu">
-                      <a href="management.html" >
+                      <a href="topusers" >
                           <i class="fa fa-desktop"></i>
                           <span>Customer Analysis</span>
                       </a>
@@ -93,47 +103,46 @@
       </aside>
       <!--sidebar end-->
       
-      <!-- **********************************************************************************************************************************************************
-      MAIN CONTENT
-      *********************************************************************************************************************************************************** -->
       <!--main content start-->
       <section id="main-content">
           <section class="wrapper">
-
                       
           <div class="row mt">
             <div class="col-md-4 col-sm-4 mb">
-              <!-- REVENUE PANEL -->
+              <!-- Player Panel -->
               <div class="darkblue-panel pn">
                 <div class="darkblue-header">
                   <h5 id="rosterQB">QB</h5>
                 </div>
-                <div class="chart mt">
-                  <div class="sparkline" data-type="line" data-resize="true" data-height="75" data-width="90%" data-line-width="1" data-line-color="#fff" data-spot-color="#fff" data-fill-color="" data-highlight-line-color="#fff" data-spot-radius="4" data-data="[200,135,667,333,526,996,564,123,342,464,655]"></div>
+                <div id="rosterQBPointChart" class="chart mt">
+                  <div class="sparkline"></div>
                 </div>
               </div>
             </div><!-- /col-md-4 -->
 
                         <div class="col-md-4 col-sm-4 mb">
-              <!-- REVENUE PANEL -->
+              <!-- Player Panel -->
               <div class="darkblue-panel pn">
                 <div class="darkblue-header">
                   <h5 id="rosterRB">RB</h5>
                 </div>
-                <div class="chart mt">
-                  <div class="sparkline" data-type="line" data-resize="true" data-height="75" data-width="90%" data-line-width="1" data-line-color="#fff" data-spot-color="#fff" data-fill-color="" data-highlight-line-color="#fff" data-spot-radius="4" data-data="[200,135,453,333,526,996,234,123,890,464,655]"></div>
+                <div id="rosterRBPointChart" class="chart mt">
+                  <div class="sparkline"></div>
                 </div>
               </div>
             </div><!-- /col-md-4 -->
 
                         <div class="col-md-4 col-sm-4 mb">
-              <!-- REVENUE PANEL -->
+              <!-- Player Panel -->
               <div class="darkblue-panel pn">
                 <div class="darkblue-header">
-                  <h5 id="rosterTE">TE</h5>
+                  <h5 id="rosterWR">WR</h5>
+                  <h6 id="avgPointsWR"> 0.0 </h6>
                 </div>
-                <div class="chart mt">
-                  <div class="sparkline" data-type="line" data-resize="true" data-height="75" data-width="90%" data-line-width="1" data-line-color="#fff" data-spot-color="#fff" data-fill-color="" data-highlight-line-color="#fff" data-spot-radius="4" data-data="[200,135,234,333,526,734,564,123,231,464,655]"></div>
+                <div id="rosterWRPointChart" class="chart mt">
+                    <div class="panel-body text-center">
+                        <div class="sparkline"></div>
+                    </div>
                 </div>
               </div>
             </div><!-- /col-md-4 -->
@@ -141,18 +150,42 @@
                       	
 
                     </div><!-- /row -->
+
+
+
+                    <div class="row mt">
                     
-					<div class="row mt">
-                      <div class="col-lg-12">
+                    <div class="col-md-4 col-sm-4 mb">
+                          <div class="darkblue-panel pn">
+                            <div class="darkblue-header">
+                    <h5>New Graph</h5>
+                            </div>
+                <canvas id="line2" height="140" width="175"></canvas>
+
+                <p>April 17, 2014</p>
+                          </div><!-- /darkblue panel -->
+                        </div><!-- /col-md-4 -->
+
+                        </div><!-- /row -->
+                    
+                    <div class="col-lg-6">
                           <div class="content-panel">
-                <h4><i class="fa fa-angle-right"></i> Points</h4>
+                <h4><i class="fa fa-angle-right"></i> Your Fantasy Points!</h4>
                               <div class="panel-body text-center">
                                   <canvas id="line" height="300" width="400"></canvas>
                               </div>
                           </div>
                       </div>
-                  </div>
-					</div><!-- /row -->	
+
+                  <div class="col-lg-6">
+                          <div class="content-panel">
+                <h4><i class="fa fa-angle-right"></i> D3 Chart</h4>
+                              <div id="myD3">
+                                  
+                              </div>
+                          </div>
+                      </div>
+					
 					
                   </div><!-- /col-lg-9 END SECTION MIDDLE -->
                                  
@@ -161,6 +194,9 @@
               </div><!-- /row -->
           </section>
       </section>
+
+
+
 
       <!--main content end-->
       <!--footer start-->
@@ -187,30 +223,104 @@
 
     <!--common script for all pages-->
     <script src="static/js/common-scripts.js"></script>
-    
     <script type="text/javascript" src="static/js/gritter/js/jquery.gritter.js"></script>
     <script type="text/javascript" src="static/js/gritter-conf.js"></script>
 
     <!--script for this page-->
     <script src="static/js/sparkline-chart.js"></script>    
-    <script src="assets/js/chart-master/Chart.js"></script>
-    <script src="assets/js/chartjs-conf.js"></script>
+    <script src="static/js/chart-master/Chart.js"></script>
+    <script src="static/js/chartjs-conf.js"></script>
+
+    <!-- To Do: host my version -->
+    <script src="http://d3js.org/d3.v3.js"></script>
 
 
     <!-- more scripts -->
 
     <!-- format me (indents and stuff) -->
                 <script>
+ 
+
+function draw_histogram(reference, pos_data){
+            var margin = {top: 20, right: 20, bottom: 30, left: 50},
+                width = 300 - margin.left - margin.right,
+                height = 300 - margin.top - margin.bottom;
+
+            var parseDate = d3.time.format("%d-%b-%y").parse;
+
+            var x = d3.time.scale()
+                .range([0, width]);
+
+            var y = d3.scale.linear()
+                .range([height, 0]);
+
+            var xAxis = d3.svg.axis()
+                .scale(x)
+                .orient("bottom");
+
+            var yAxis = d3.svg.axis()
+                .scale(y)
+                .orient("left");
+
+            var area = d3.svg.area()
+                .x(function(d) { return x(d.date); })
+                .y0(height)
+                .y1(function(d) { return y(d.close); });
+
+            var svg = d3.select("#myD3").append("svg")
+                .attr("width", width + margin.left + margin.right)
+                .attr("height", height + margin.top + margin.bottom)
+              .append("g")
+                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+            var data;
+
+            d3.json("data/user/roster/323", function(error, json) {
+
+              if (error) return console.warn(error);
+              data = json;
+              console.log(data);
+
+              x.domain(d3.extent(data, function(d) { return d.points; }));
+              y.domain([0, d3.max(data, function(d) { return d.points; })]);
+
+              svg.append("path")
+                  .datum(data)
+                  .attr("class", "area")
+                  .attr("d", area);
+
+              svg.append("g")
+                  .attr("class", "x axis")
+                  .attr("transform", "translate(0," + height + ")")
+                  .call(xAxis);
+
+              svg.append("g")
+                  .attr("class", "y axis")
+                  .call(yAxis)
+                .append("text")
+                  .attr("transform", "rotate(-90)")
+                  .attr("y", 6)
+                  .attr("dy", ".71em")
+                  .style("text-anchor", "end")
+                  .text("Fantasy Points");
+            });
+
+          }
+
+
 
 
             function getUserRosterAndUpdateUi(userId) {
               $.ajax({
-              url: "data/user/roster/" + userId,
+                url: "data/user/roster/" + userId,
               })
               .done(function( jsonString ) {
                 
                 // Debug print
                 // console.log(jsonString);
+
+                console.log(jsonString);
+                draw_histogram("myD3", JSON);
 
                 // Parse the string into a json object
                 var json = JSON.parse(jsonString);
@@ -220,16 +330,102 @@
                     // console.log(json[i].position + " " + json[i].playername);
 
                     // Used index of because the json is returned as " QB" (extra leading space for some reason)
-                    if(json[i].position.indexOf("QB") >= 0)
+                    if(json[i].position.indexOf("QB") >= 0) {
                       $("#rosterQB").text(json[i].playername);
-                    else if(json[i].position.indexOf("RB") >= 0)
+
+                          $("#rosterQBPointChart").sparkline(json[i].points, {
+                              type: 'line',
+                              width: '90%',
+                              height: '75',
+                              fillColor: '',
+                              lineColor: '#fff',
+                              lineWidth: 2,
+                              spotColor: '#fff',
+                              minSpotColor: '#fff',
+                              maxSpotColor: '#fff',
+                              highlightSpotColor: '#fff',
+                              highlightLineColor: '#ffffff',
+                              spotRadius: 4,
+                              highlightLineColor: '#ffffff'
+                          });
+
+                          var pointsLength = QBChart.datasets[0].points.length;
+
+
+                    } else if(json[i].position.indexOf("RB") >= 0) {
                       $("#rosterRB").text(json[i].playername);
-                    else if(json[i].position.indexOf("TE") >= 0)
-                      $("#rosterTE").text(json[i].playername);
+                      $("#rosterRBPointChart").sparkline(json[i].points, {
+                              type: 'line',
+                              width: '90%',
+                              height: '75',
+                              fillColor: '',
+                              lineColor: '#fff',
+                              lineWidth: 2,
+                              spotColor: '#fff',
+                              minSpotColor: '#fff',
+                              maxSpotColor: '#fff',
+                              highlightSpotColor: '#fff',
+                              highlightLineColor: '#ffffff',
+                              spotRadius: 4,
+                              highlightLineColor: '#ffffff'
+                      });
+                    }  
+                    else if(json[i].position.indexOf("WR") >= 0){
+                      $("#rosterWR").text(json[i].playername);
+
+                      $("#rosterWRPointChart").sparkline(json[i].points, {
+                              type: 'line',
+                              width: '90%',
+                              height: '75',
+                              fillColor: '',
+                              lineColor: '#fff',
+                              lineWidth: 2,
+                              spotColor: '#fff',
+                              minSpotColor: '#fff',
+                              maxSpotColor: '#fff',
+                              highlightSpotColor: '#fff',
+                              highlightLineColor: '#ffffff',
+                              spotRadius: 4,
+                              highlightLineColor: '#ffffff'
+                      });
+
+
+
+                         
+
+
+
+                    }
                 }
+
+
+
+
               });
             };
-            </script>
+
+
+         var lineChartData = {
+                              labels : ["","","","","","",""],
+                              datasets : [
+                                  {
+                                      fillColor : "rgba(151,187,205,0.5)",
+                                      strokeColor : "rgba(151,187,205,1)",
+                                      pointColor : "rgba(151,187,205,1)",
+                                      pointStrokeColor : "#fff",
+                                      data : [3,52,52,55,12,67]
+                                  }
+                              ]
+
+                          };
+
+
+        var QBChart = new Chart(document.getElementById("line").getContext("2d")).Line(lineChartData);
+        new Chart(document.getElementById("line2").getContext("2d")).Line(lineChartData);
+
+    </script>
+
+
 
     <script>
             $(document).ready(function() {

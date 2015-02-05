@@ -20,8 +20,17 @@ def query_roster(userId):
     	temp = {}
     	temp["position"] = rosterRow[0]
     	temp["playername"] = rosterRow[1]
+        temp["points"] = query_player(rosterRow[1].strip())
     	returnArr.append(temp)
     return returnArr
+
+def query_player(playerName):
+    rows = session.execute("SELECT points FROM fantasyfootball.playerpoints WHERE playername = \'" + playerName +"\'")
+    returnArr = []
+    for pointRow in rows:
+        returnArr.append(pointRow[0])
+    return returnArr
+
 
 @app.route("/management.html")
 def management():
@@ -45,6 +54,11 @@ def topusersJson():
 def userRoster(userId):
 	userRosterVar = json.dumps(query_roster(userId))
 	return userRosterVar
+
+@app.route("/data/player/points/<playername>")
+def playerPoints(playername):
+    playerPointsVar = json.dumps(query_player(playername))
+    return playerPointsVar
 
 
 if __name__ == "__main__":

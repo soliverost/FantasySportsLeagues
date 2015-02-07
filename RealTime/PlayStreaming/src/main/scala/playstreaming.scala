@@ -13,6 +13,18 @@ import com.datastax.spark.connector.streaming._
 
 object playstreaming {
 
+    def updateFunction(newValues: Seq[Double], runningCount: Option[Double]): Option[Double] = {
+
+        if(newValues.isEmpty){
+            None
+        } else{
+            val newCount = newValues.sum;  
+            val oldCount = runningCount.getOrElse(0.0)
+
+            Some((newCount + oldCount))
+        }
+    }
+
   def main(args: Array[String]) {
 
     val zkQuorum = "localhost:2181"
@@ -25,8 +37,6 @@ object playstreaming {
                     .set("spark.cassandra.connection.host", "54.67.124.220")
     val sc = new SparkContext(conf)
 
-    case class PU(pname:String, uid:Int)
-
     val ssc =  new StreamingContext(sc, Seconds(7))
     ssc.checkpoint("checkpoint")
 
@@ -38,57 +48,29 @@ object playstreaming {
     // Kafka consumer
     val lines = KafkaUtils.createStream(ssc, zkQuorum, group, topics)
 
+    // Map my kafka stream to the correct key,value:
     val testInput = lines.map({line => val pieces = line._2.split(",")
         (pieces(2),(pieces(3),pieces(0)))})
-    testInput.print()
+    // testInput.print()
    
+    // Join with the appropiate user and flatten
     val joinedUserPoints = testInput.transform(rdd=> rdd.join(playeruser))
-
     val userPointsFlat = joinedUserPoints.map{case(a,((b,c),d)) => (a,b,c,d)}
-    userPointsFlat.print()
-
-    //val rdd = ssc.cassandraTable("playerfollowers", "playeruser").select("userid").where("playername = ?", " " + separated(2)).toArray.foreach(println)
+    //userPointsFlat.print()
 
 
+    // Keep track of the score of the day
+    val userPointsDay = userPointsFlat.map{case(player,points,date,uid) => ((uid,date),points.toDouble)}
+    val runningCounts = userPointsDay.updateStateByKey[Double](updateFunction _)
+    runningCounts.print()
 
-
-
-    // ---------------------------------------------------
-
-    /**
 
 
 
     // New RDD from Cassandra Query
     // val playeruser = ssc.cassandraTable("playerfollowers", "playeruser").select("playername","userid")
 
-    val joinedUserPoints = testInput.transform(rdd => rdd.join(playeruser)) //Array
-    val testOutput = joinedUserPoints.map{case(a,b) => (a)}
-    testOutput.print()
-
-    */
-
-    
-
-
-
-    // Splitting my lines to get the name of the player
-    /**
-    lines.foreachRDD(rdd => {
-
-        for(item <- rdd.collect().toArray) {
-            val separated = item._2.split(",")
-        }
-
-        val rdd = ssc.cassandraTable("playerfollowers", "playeruser").select("userid").where("playername = ?", " " + separated(2)).toArray.foreach(println)
-        
-    })**/
-
-
     /*
-    val stream_element = lines.count()
-    stream_element.print()
-
     val stream_window_element = lines.countByWindow(Seconds(5), Seconds(1))
     stream_window_element.print()*/
 

@@ -63,34 +63,12 @@ object BatchQueries {
 
 		// Save as: userid, day, points
 
-
-
 		/** Calculate Player's points by Game(~Day) **/
 
 		val playerscore = playerPoints.map({line => val tokens = line.split(",")
 			((tokens(0),tokens(2)),tokens(4).toDouble)}).reduceByKey(_+_)
 		val playerscore_flat = playerscore.map{case(composite,points) => (composite._1,composite._2,points)}
 		playerscore_flat.saveToCassandra("fantasyfootball","playerpoints",SomeColumns("date","playername","points"))
-
-
-
-
-		/** Calculate Player's avg points **/
-		// This is a naive way... Play with mlib library later
-		val input = sc.parallelize(List(("coffee", 1) , ("coffee", 2) , ("panda", 4)))
-		val result = input.combineByKey(
-		  (v) => (v, 1),
-		  (acc: (Int, Int), v) => (acc._1 + v, acc._2 + 1),
-		  (acc1: (Int, Int), acc2: (Int, Int)) => (acc1._1 + acc2._1, acc1._2 + acc2._2)
-		  ).map{ case (key, value) => (key, value._1 / value._2.toFloat) }
-
-
-
-
-
-		
-		//result.collectAsMap().map(println(_))
-
 
 	}
 }

@@ -16,7 +16,6 @@ object BatchQueries {
 
     	// To Do: encapsulate data better:
     	//case class User(id: Int, name: String)
-		//case class UserGender(userId: Int, gender: String)
 
     	/** Read in the files that need to be processed 
     	 ** Player Data: date,time,player name, position, points
@@ -32,36 +31,19 @@ object BatchQueries {
 		// Swap the keys and values for sorting!
 		val vk = topUsers.map(_.swap).sortByKey(false) //false=descending
 		val topTen = sc.parallelize(vk.take(10))
-
-		//topTen.saveToCassandra("fantasyfootball", "topusers", SomeColumns("points", "userid"))
+		topTen.saveToCassandra("fantasyfootball", "topusers", SomeColumns("points", "userid"))
 
 		/** Calculate User's points by different granularity: Month, Day, Hour **/
-
-		/*
-		val scoresMonth = file.map({line => val pieces = line.split(",")
-			val datePieces = pieces(3).split("/")
-			(pieces(0) + "|" + datePieces(0), pieces(1).toDouble)}).reduceByKey(_+_)
-		*/
-
 		val scoresmonth = userPoints.map({line => val pieces = line.split(",")
 			val datePieces = pieces(3).split("/")
 			((pieces(0),datePieces(0)),pieces(1).toDouble)}).reduceByKey(_+_)
-
-		//scoresmonth.saveToCassandra("fantasyfootball","userpoints",SomeColumns("userid","date","points"))
-
-		// Save as: userid, month, points
-
+		scoresmonth.saveToCassandra("fantasyfootball","userpoints",SomeColumns("userid","date","points"))
 
 		val scoresday = userPoints.map({line => val pieces = line.split(",")
 			val datePieces = pieces(3).split("/")
 			((pieces(0),datePieces(1)),pieces(1).toDouble)}).reduceByKey(_+_)
-
-		// Flatten the key to store in different columns
-		// TODO: Check how I'm storing my userid... no real need for a double... date is also a string atm
 		val scoresdayf = scoresday.map{case(composite,points) => (composite._1.toDouble,composite._2,points)}
-		//scoresdayf.saveToCassandra("fantasyfootball","userpoints",SomeColumns("userid","date","points"))
-
-		// Save as: userid, day, points
+		scoresdayf.saveToCassandra("fantasyfootball","userpoints",SomeColumns("userid","date","points"))
 
 		/** Calculate Player's points by Game(~Day) **/
 

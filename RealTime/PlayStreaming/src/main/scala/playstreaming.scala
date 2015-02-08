@@ -55,14 +55,14 @@ object playstreaming {
    
     // Join with the appropiate user and flatten
     val joinedUserPoints = testInput.transform(rdd=> rdd.join(playeruser))
-    val userPointsFlat = joinedUserPoints.map{case(a,((b,c),d)) => (a,b,c,d)}
-    //userPointsFlat.print()
-
-
+    val userPointsFlat = joinedUserPoints.map{case(pname,((points,date),uid)) => (uid,date,points)}
+    // TODO: Save to HDFS
+    
     // Keep track of the score of the day
-    val userPointsDay = userPointsFlat.map{case(player,points,date,uid) => ((uid,date),points.toDouble)}
+    val userPointsDay = userPointsFlat.map{case(uid,date,points) => ((uid,date),points.toDouble)}
     val runningCounts = userPointsDay.updateStateByKey[Double](updateFunction _)
-    runningCounts.print()
+    val runningCountsFlat = runningCounts.map{case((uid,date),points) => (uid,date,points)}
+    runningCountsFlat.saveToCassandra("fantasyfootball","userpointsstream",SomeColumns("userid","date","points"))
 
 
 

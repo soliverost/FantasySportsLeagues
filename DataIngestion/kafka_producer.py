@@ -14,14 +14,15 @@ class kafkaProducer(object):
     def createUserData(self, date, time,playername, points):
         if playername:
             stringRow = "%s,%s,%s,%s" % (date,time,playername,points)
-            self.producer.send_messages("playplay", stringRow)
+            self.producer.send_messages("playtest2", stringRow)
+            #print(stringRow)
 
     def readAndStream(self):
 
-        with open('data/QBData.csv', "rU") as csvfile:
+        with open('data/PlayerPoints_2014.csv', "rU") as csvfile:
             filereader = csv.reader(csvfile, delimiter=',', quotechar='|')
             for row in filereader:
-                self.createUserData(row[0],row[1],row[2],row[3])
+                self.createUserData(row[0],row[1],row[2],row[4])
                 time.sleep(1)
         filereader.close()
 
